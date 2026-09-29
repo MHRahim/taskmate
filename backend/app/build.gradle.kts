@@ -5,10 +5,27 @@
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/9.3.1/userguide/building_java_projects.html in the Gradle documentation.
  */
 
+buildscript {
+    repositories {
+        mavenCentral()
+        maven(url = "https://plugins.gradle.org/m2/")
+    }
+    dependencies {
+        classpath("org.liquibase:liquibase-gradle-plugin:3.1.0")
+        classpath("org.liquibase:liquibase-core:4.31.1")
+    }
+}
+
+
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    id("org.springframework.boot") version "3.5.4"
+    id("io.spring.dependency-management") version "1.1.7"
+
 }
+apply(plugin = "org.liquibase.gradle")
+
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -23,7 +40,20 @@ dependencies {
 
     // This dependency is used by the application.
     implementation(libs.guava)
+
+
+    //Springboot
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    //Liquidbase
+    implementation("org.liquibase:liquibase-core")
+    implementation("org.liquibase:liquibase-gradle-plugin")
+
+    //DB Driver
+    runtimeOnly("org.postgresql:postgresql")
 }
+
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
